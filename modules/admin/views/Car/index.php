@@ -29,6 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'colour',
             'consumption',
             'cost_less_30_inc',
+            [
+                    'format' => 'html',
+                    'label' => 'Image',
+                    'value' => function($data){
+                        return Html::img($data->getImage(), ['width'=>200]);
+                    }
+            ],
             // 'cost_more_31',
             // 'foto',
             // 'mark',

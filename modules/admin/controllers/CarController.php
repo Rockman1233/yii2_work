@@ -2,12 +2,14 @@
 
 namespace app\modules\admin\controllers;
 
+use app\models\ImageUpload;
 use Yii;
 use app\models\Car;
 use app\models\CarSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * CarController implements the CRUD actions for Car model.
@@ -124,7 +126,27 @@ class CarController extends Controller
 
     public function actionSetImage($id)
     {
-        die($id);
+        $model = new ImageUpload;
+
+        if(Yii::$app->request->isPost)
+        {
+            //находим авто по ИД
+            $car = $this->findModel($id);
+            //вытягиваем картинку из ПОСТ
+            $file = UploadedFile::getInstance($model, 'image');
+            //берем у рассматриваемого авто существующую картинку
+            $currentImage = $car->foto;
+            //передаем на сохранение название текущего файла и загруженного файла (чтоб если что перезаписать)
+            $img_name = $model->UploadFile($file, $currentImage);
+            //если фото успешно записаось в модель делаем редирект
+            if($car->saveImage($img_name))
+            {
+                return $this->redirect(['view', 'id' => $car->car_id]);
+            }
+
+        }
+        //если фоточка не была загружена возвращаем к полю загрузки
+        return $this->render('image',['model'=>$model]);
     }
 
 
