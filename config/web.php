@@ -49,6 +49,13 @@ $config = [
             'showScriptName' => false,
         ],
 
+
+],
+    'modules' => [
+        'admin' => [
+            'class' => 'app\modules\admin\Module',
+        ],
+
     ],
     'params' => $params,
 ];
